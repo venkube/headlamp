@@ -1,0 +1,57 @@
+# -- Number of desired pods
+replicaCount: 1
+
+config:
+  inCluster: true
+  # -- base url path at which headlamp should run
+  baseURL: "/headlamp"
+
+  # -- directory to look for plugins
+  pluginsDir: "/headlamp/plugins"
+  # Enable Helm operations like install, upgrade and uninstall of Helm charts
+  enableHelm: false
+  watchPlugins: false
+  # tlsCertPath: "/headlamp-cert/headlamp-ca.crt"
+  # tlsKeyPath: "/headlamp-cert/headlamp-tls.key"
+  # Extra arguments that can be given to the container. See charts/headlamp/README.md for more information.
+  extraArgs: []
+
+automountServiceAccountToken: true
+
+clusterRoleBinding:
+  # -- Specified whether a cluster role binding should be created
+  create: true
+  # -- Set name of the Cluster Role with limited permissions from you cluster
+  # Using custom read-only cluster role instead of cluster-admin
+  clusterRoleName: headlamp-readonly
+  # -- Annotations to add to the cluster role binding
+  annotations: {}
+
+persistentVolumeClaim:
+  # -- Enable Persistent Volume Claim
+  enabled: false
+
+  # -- accessModes for the persistent volume claim, eg: ReadWriteOnce, ReadOnlyMany, ReadWriteMany etc.
+  accessModes:
+    - ReadWriteOnce
+  # -- size of the persistent volume claim, eg: 10Gi. Required if enabled is true.
+  size: "10Gi"
+  # -- storageClassName for the persistent volume claim.
+  storageClassName: "gp3"
+
+# -- CPU/Memory resource requests/limits
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+   limits:
+     cpu: 500m
+     memory: 512Mi
+   requests:
+      cpu: 100m
+      memory: 128Mi
+
+ingress:
+  # -- Enable ingress controller resource
+  enabled: false
